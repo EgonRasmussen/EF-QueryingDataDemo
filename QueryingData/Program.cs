@@ -14,6 +14,8 @@ namespace QueryingData
     {
         static void Main(string[] args)
         {
+            InitializeDb();
+
             EagerLoading_PostsBlogs();
             //EagerLoading_BlogsOwner_BlogsPosts();
             //EagerLoading_BlogsPostsAuthor();
@@ -22,8 +24,12 @@ namespace QueryingData
             //EagerLoding_BlogsPostsAuthor_BlogsPostsTags();
 
             //ExplicitLoading_BlogPostOwner();
-        }
+            //ExplicitLoading_BlogPost_Count();
+            //ExplicitLoading_BlogPostTag_Query();
 
+        }    
+
+        #region EAGER LOADING
         static void EagerLoading_PostsBlogs()
         {
             using (var context = new BloggingContext())
@@ -100,12 +106,14 @@ namespace QueryingData
                 DisplayGraph(blogs);
             }
         }
+        #endregion
 
+        #region EXPLICIT LOADING
         private static void ExplicitLoading_BlogPostOwner()
         {
             using (var context = new BloggingContext())
             {
-                Console.WriteLine("***** User has chosen BlogId = 1");
+                Console.WriteLine("***** User selected BlogId = 1");
                 var blog = context.Blogs
                     .Single(b => b.BlogId == 1);
                 Console.WriteLine($"BlogId: {blog.BlogId} - Url: {blog.Url}");
@@ -126,6 +134,67 @@ namespace QueryingData
                 Console.WriteLine($"BlogId: {blog.BlogId} has Owner: {blog.Owner.Name}");
             }
         }
+
+        private static void ExplicitLoading_BlogPost_Count()
+        {
+            using (var context = new BloggingContext())
+            {
+                Console.WriteLine("***** User selected BlogId = 1");
+                var blog = context.Blogs
+                    .Single(b => b.BlogId == 1);
+                Console.WriteLine($"BlogId: {blog.BlogId} - Url: {blog.Url}");
+
+                Console.WriteLine("\n***** User will see all Posts and the number of Posts, without actually selected them");
+                var numberPosts = context.Entry(blog)
+                    .Collection(b => b.Posts)
+                    .Query().Count();           // No Load(), only the number is returned!
+
+
+                Console.WriteLine("-----------------------------------------------------------------------");
+                Console.WriteLine($"Blog {blog.BlogId} has: {numberPosts} posts");
+            }
+        }
+
+        private static void ExplicitLoading_BlogPostTag_Query()
+        {
+            using (var context = new BloggingContext())
+            {
+                Console.WriteLine("***** User selected BlogId = 1");
+                var blog = context.Blogs
+                    .Single(b => b.BlogId == 1);
+                Console.WriteLine($"BlogId: {blog.BlogId} - Url: {blog.Url}");
+
+                Console.WriteLine("\n***** User will see all Posts and their Tags for BlogId 1");
+                context.Entry(blog)
+                    .Collection(b => b.Posts)
+                    .Query()                // Query() opens for new queries
+                    .Include(p => p.Tags)
+                    .Load();
+
+                Console.WriteLine("-----------------------------------------------------------------------");
+                foreach (var post in blog.Posts)
+                {
+                    Console.WriteLine($"\tTitle: {post.Title} - Content: {post.Content}");
+                    foreach (PostTag postTag in post.Tags)
+                    {
+                        Console.WriteLine($"\t\tTag: {postTag.TagId}");
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region INITIALIZE DB
+        private static void InitializeDb()
+        {
+            using (var context = new BloggingContext())
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+                Console.WriteLine("Database recreated");
+            }
+        }
+        #endregion
 
         #region DISPLAY GRAPH
         static void DisplayGraph(IEnumerable<Blog> blogs)
