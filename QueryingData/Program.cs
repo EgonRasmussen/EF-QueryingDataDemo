@@ -24,30 +24,6 @@ namespace QueryingData
             //ExplicitLoading_BlogPostOwner();
         }
 
-        private static void ExplicitLoading_BlogPostOwner()
-        {
-            using (var context = new BloggingContext())
-            {
-                var blog = context.Blogs
-                    .Single(b => b.BlogId == 1);
-
-                context.Entry(blog)
-                    .Collection(b => b.Posts)
-                    .Load();
-
-                context.Entry(blog)
-                    .Reference(b => b.Owner)
-                    .Load();
-
-                Console.WriteLine($"BlogId: {blog.BlogId} - Url: {blog.Url} - Owner: {blog.Owner.Name}");
-                foreach (var post in blog.Posts)
-                {
-                    Console.WriteLine($"\tTitle: {post.Title} - Content: {post.Content}");
-                }
-
-            }
-        }
-
         static void EagerLoading_PostsBlogs()
         {
             using (var context = new BloggingContext())
@@ -125,6 +101,33 @@ namespace QueryingData
             }
         }
 
+        private static void ExplicitLoading_BlogPostOwner()
+        {
+            using (var context = new BloggingContext())
+            {
+                Console.WriteLine("***** User has chosen BlogId = 1");
+                var blog = context.Blogs
+                    .Single(b => b.BlogId == 1);
+                Console.WriteLine($"BlogId: {blog.BlogId} - Url: {blog.Url}");
+
+                Console.WriteLine("\n***** User will see all Posts for BlogId 1");
+                context.Entry(blog)
+                    .Collection(b => b.Posts)
+                    .Load();
+                foreach (var post in blog.Posts)
+                {
+                    Console.WriteLine($"\tTitle: {post.Title} - Content: {post.Content}");
+                }
+
+                Console.WriteLine("\n***** Later will the user also see name of the blog-owner");
+                context.Entry(blog)
+                    .Reference(b => b.Owner)
+                    .Load();
+                Console.WriteLine($"BlogId: {blog.BlogId} has Owner: {blog.Owner.Name}");
+            }
+        }
+
+        #region DISPLAY GRAPH
         static void DisplayGraph(IEnumerable<Blog> blogs)
         {
             foreach (var blog in blogs)
@@ -143,5 +146,6 @@ namespace QueryingData
                 }
             }
         }
+        #endregion
     }
 }
