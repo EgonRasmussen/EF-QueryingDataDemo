@@ -2,12 +2,6 @@
 // Install-Package Microsoft.Extensions.Logging.Console
 // Install-Package Microsoft.EntityFrameworkCore.Tools
 
-// Drop-Database
-// Add-Migration Initials
-// Update-Database
-
-// SET NOCOUNT ON: This prevents the message from showing which contains the number of affected rows.
-
 using Microsoft.EntityFrameworkCore;
 using QueryingData.Models;
 using System;
@@ -15,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace QueryingData
-
 {
     class Program
     {
