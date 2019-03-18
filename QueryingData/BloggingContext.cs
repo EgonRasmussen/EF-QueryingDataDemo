@@ -56,9 +56,9 @@ namespace QueryingData
                 new Post() { PostId = 1, Title = "Post 1", Content = "Dette er Post 1 i Blog 1", Rating = 2, BlogId = 1, AuthorId = 1 },
                 new Post() { PostId = 2, Title = "Post 2", Content = "Dette er Post 2 i Blog 1", Rating = 3, BlogId = 1, AuthorId = 4 },
                 new Post() { PostId = 3, Title = "Post 3", Content = "Dette er Post 3 i Blog 1", Rating = 4, BlogId = 1, AuthorId = 4 },
-                new Post() { PostId = 4, Title = "Post 1", Content = "Dette er post 1 i Blog 2", BlogId = 2, AuthorId = 5 },
-                new Post() { PostId = 5, Title = "Post 2", Content = "Dette er post 2 i Blog 2", BlogId = 2, AuthorId = 6 },
-                new Post() { PostId = 6, Title = "Post 1", Content = "Dette er post 1 i Blog 3", BlogId = 3 }
+                new Post() { PostId = 4, Title = "Post 4", Content = "Dette er post 4 i Blog 2", Rating = 3, BlogId = 2, AuthorId = 5 },
+                new Post() { PostId = 5, Title = "Post 5", Content = "Dette er post 5 i Blog 2", Rating = 1, BlogId = 2, AuthorId = 6 },
+                new Post() { PostId = 6, Title = "Post 6", Content = "Dette er post 6 i Blog 3", Rating = 2, BlogId = 3 }
                 );
 
             modelBuilder.Entity<Tag>().HasData(
