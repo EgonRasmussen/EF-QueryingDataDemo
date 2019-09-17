@@ -16,7 +16,7 @@ namespace QueryingData
         {
             InitializeDb();
 
-            EagerLoading_PostsBlogs();
+            //EagerLoading_PostsBlogs();
             //EagerLoading_BlogsOwner_BlogsPosts();
             //EagerLoading_BlogsPostsAuthor();
             //EagerLoading_BlogsPostsAuthorPhoto();
@@ -27,7 +27,8 @@ namespace QueryingData
             //ExplicitLoading_BlogPost_Count();
             //ExplicitLoading_BlogPostTag_Query();
 
-        }    
+            //SelectLoading();
+        }
 
         #region EAGER LOADING
         static void EagerLoading_PostsBlogs()
@@ -181,6 +182,34 @@ namespace QueryingData
                     }
                 }
             }
+        }
+        #endregion
+
+        #region SELECT LOADING
+        private static void SelectLoading()
+        {
+            Console.WriteLine("---------  SelectLoading ---------");
+
+            using (BloggingContext context = new BloggingContext())
+            {
+                var result = context.Blogs
+                    .Where(b => b.BlogId == 2)
+                    .Select(b => new
+                    {
+                        b.Url,
+                        NumberPosts = b.Posts.Count(),
+                        BlogOwner = b.Owner.Name,
+                        OwnerPhotoCaption = b.Owner.Photo.Caption,
+                        PostsPrBlog = context.Posts.Where(p => b.BlogId == p.BlogId)
+                    }).FirstOrDefault();
+
+                Console.WriteLine("Url: {0} - Number of Posts: {1} - BlogOwner: {2}", result.Url, result.NumberPosts, result.BlogOwner);
+                foreach (var post in result.PostsPrBlog)
+                {
+                    Console.WriteLine($"Post title: {post.Title}");
+                }
+            }
+
         }
         #endregion
 
