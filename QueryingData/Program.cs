@@ -14,7 +14,7 @@ namespace QueryingData
     {
         static void Main(string[] args)
         {
-            InitializeDb();
+            //InitializeDb();
 
             //EagerLoading_PostsBlogs();
             //EagerLoading_BlogsOwner_BlogsPosts();
@@ -27,7 +27,7 @@ namespace QueryingData
             //ExplicitLoading_BlogPost_Count();
             //ExplicitLoading_BlogPostTag_Query();
 
-            //SelectLoading();
+            SelectLoading();
         }
 
         #region EAGER LOADING
@@ -200,7 +200,7 @@ namespace QueryingData
                         NumberPosts = b.Posts.Count(),
                         BlogOwner = b.Owner.Name,
                         OwnerPhotoCaption = b.Owner.Photo.Caption,
-                        PostsPrBlog = context.Posts.Where(p => b.BlogId == p.BlogId)
+                        PostsPrBlog = b.Posts
                     }).FirstOrDefault();
 
                 Console.WriteLine("Url: {0} - Number of Posts: {1} - BlogOwner: {2}", result.Url, result.NumberPosts, result.BlogOwner);
