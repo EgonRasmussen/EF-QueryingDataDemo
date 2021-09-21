@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using QueryingData.Models;
+using System;
 
 namespace QueryingData
 {
@@ -12,12 +12,9 @@ namespace QueryingData
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = BloggingDb; Trusted_Connection = True; ")
-            .EnableSensitiveDataLogging(true)
-            .UseLoggerFactory(new ServiceCollection()
-            .AddLogging(builder => builder.AddConsole()
-                .AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information))
-                .BuildServiceProvider().GetService<ILoggerFactory>());
+            optionsBuilder
+                .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
+                .UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = BloggingDb; Trusted_Connection = True; ");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

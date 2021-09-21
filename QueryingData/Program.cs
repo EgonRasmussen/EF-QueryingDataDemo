@@ -1,8 +1,4 @@
-﻿// Install-Package Microsoft.EntityFrameworkCore.SqlServer
-// Install-Package Microsoft.Extensions.Logging.Console
-// Install-Package Microsoft.EntityFrameworkCore.Tools
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using QueryingData.Models;
 using System;
 using System.Collections.Generic;
@@ -14,9 +10,9 @@ namespace QueryingData
     {
         static void Main(string[] args)
         {
-            //InitializeDb();
+            InitializeDb();
 
-            //EagerLoading_PostsBlogs();
+            EagerLoading_PostsBlogs();
             //EagerLoading_BlogsOwner_BlogsPosts();
             //EagerLoading_BlogsPostsAuthor();
             //EagerLoading_BlogsPostsAuthorPhoto();
@@ -27,7 +23,7 @@ namespace QueryingData
             //ExplicitLoading_BlogPost_Count();
             //ExplicitLoading_BlogPostTag_Query();
 
-            SelectLoading();
+            //SelectLoading();
         }
 
         #region EAGER LOADING
